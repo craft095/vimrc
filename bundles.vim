@@ -17,7 +17,7 @@ Bundle 'git://github.com/tyru/fencview.vim'
 
 Bundle 'git://github.com/vim-scripts/L9.git'
 Bundle 'git://github.com/vim-scripts/FuzzyFinder.git'
-Bundle 'git://github.com/vim-scripts/molokai.git'
+Bundle 'git://github.com/craft095/molokai.git'
 Bundle 'git://github.com/vim-scripts/Rainbow-Parenthsis-Bundle.git'
 " Bundle 'git://github.com/frerich/unicode-haskell.git'
 "
