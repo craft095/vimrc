@@ -24,6 +24,12 @@ filetype plugin on
 "au FileType haskell setlocal path += rap_path
 "au FileType haskell setlocal path += (rap_path.'/resources')
 au FileType haskell set encoding=utf-8
+"au BufEnter *.hs compiler ghc
+let g:haddock_browser = "/usr/bin/chromium-browser"
+
+"hi ghcmodType ctermbg=yellow
+"let g:ghcmod_type_highlight = 'ghcmodType'
+map <Leader>t :GhcModType<cr>
 
 filetype plugin indent on 
 
@@ -65,7 +71,7 @@ set tabstop=4
 set shiftwidth=4
 
 "Clear search highlight on ESC
-nnoremap <esc> :noh<return><esc>
+nnoremap <esc> :GhcModTypeClear<return>:noh<return><esc>
 
 " show the cursor position all the time
 " set ruler
@@ -84,9 +90,10 @@ if has('gui_running')
   "   T: enable toolbar on Win32
   set go=gmr
   " set guifont=Consolas:h13
-  set guifont=DejaVu\ LGC\ Sans\ Mono\ 12
+  " set guifont=DejaVu\ LGC\ Sans\ Mono\ 12
+  set guifont=DejaVu\ Sans\ Mono\ 12
   " set guifont=Courier\ 12
-  au GUIEnter * simalt ~x
+  " au GUIEnter * simalt ~x
 endif
 " Maximize window on startup
 
@@ -99,6 +106,38 @@ imap <silent> <A-Up> <ESC>:wincmd k<CR>
 imap <silent> <A-Down> <ESC>:wincmd j<CR>
 imap <silent> <A-Left> <ESC>:wincmd h<CR>
 imap <silent> <A-Right> <ESC>:wincmd l<CR>
+
+" Work with tabs
+" :hi TabLineFill guifg=LightGreen guibg=DarkGreen ctermfg=LightGreen ctermbg=DarkGreen
+hi TabLine      guifg=#999 guibg=#222 gui=none ctermfg=254 ctermbg=238 cterm=none
+hi TabLineSel   guifg=#999 guibg=#333 gui=bold ctermfg=231 ctermbg=235 cterm=bold
+hi TabLineFill  guifg=#999 guibg=#222 gui=none ctermfg=254 ctermbg=238 cterm=none
+
+set guitablabel=%N/\ %t\ %M
+map    <C-Tab>    :tabnext<CR>
+imap   <C-Tab>    <C-O>:tabnext<CR>
+map    <C-S-Tab>  :tabprev<CR>
+imap   <C-S-Tab>  <C-O>:tabprev<CR>
+map    <A-1>      1gt
+map    <A-2>      2gt
+map    <A-3>      3gt
+map    <A-4>      4gt
+map    <A-5>      5gt
+map    <A-6>      6gt
+map    <A-7>      7gt
+map    <A-8>      8gt
+map    <A-9>      9gt
+map    <A-0>      10gt
+imap    <A-1>     <C-O>1gt
+imap    <A-2>     <C-O>2gt
+imap    <A-3>     <C-O>3gt
+imap    <A-4>     <C-O>4gt
+imap    <A-5>     <C-O>5gt
+imap    <A-6>     <C-O>6gt
+imap    <A-7>     <C-O>7gt
+imap    <A-8>     <C-O>8gt
+imap    <A-9>     <C-O>9gt
+imap    <A-0>     <C-O>10gt
 
 " Fuzzy search
 let g:fuf_modesDisable = ['mrucmd']
@@ -124,7 +163,8 @@ inoremap <C-S> <C-O>:update<CR>
 " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
 source $VIMRUNTIME/mswin.vim
 behave mswin
-
+set selectmode=
+set textwidth=0
 " follow file dir
 set autochdir
 
@@ -163,12 +203,101 @@ endfunction
 autocmd! bufwritepre * call BackupDir()
 
 " setup building for haskell
-au FileType haskell set makeprg=ghc\ -c\ -i~/work/ais-exp\ -i~/work/ais-exp/resource\ %
+au FileType haskell set makeprg=ghc\ -i/home/dima/work/ais-exp\:/home/dima/work/ais-exp/resources\ -outputdir\ /home/dima/tmp/ghc-vim\ %
+au FileType haskell let b:ghc_staticoptions = '-i/home/dima/work/ais-exp\:/home/dima/work/ais-exp/resources'
 map cn :cn<cr>
 map cp :cp<cr>
 " map cw <esc>:cw<cr>
 map <F4> :update<cr>:silent make<cr>
+imap <F4> <C-O>:update<cr><C-O>:silent make<cr>
 "vmap <F4> <C-C>:update<cr><C-C>:make!<cr><C-C>:cw<cr>
 "imap <F4> <C-O>:update<cr><C-O>:make!<cr><C-O>:cw<cr>
 autocmd QuickFixCmdPost * :cwindow
+
+" necomplete stuff
+"
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+" Use _no_ smartcase.
+let g:neocomplcache_enable_smart_case = 0
+" Use camel case completion.
+let g:neocomplcache_enable_camel_case_completion = 0
+" Use underbar completion.
+let g:neocomplcache_enable_underbar_completion = 0
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+" Disable auto popup
+let g:neocomplcache_disable_auto_complete = 1
+
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+    \ }
+
+" Define keyword.
+if !exists('g:neocomplcache_keyword_patterns')
+  let g:neocomplcache_keyword_patterns = {}
+endif
+let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Popup on <C-Space>.
+      
+inoremap <expr><C-Space> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : "\<C-x>\<C-u>"
+function! s:check_back_space()"{{{
+let col = col('.') - 1
+return !col || getline('.')[col - 1] =~ '\s'
+endfunction"}}
+        
+" SuperTab like snippets behavior.
+"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+" AutoComplPop like behavior.
+"let g:neocomplcache_enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplcache_enable_auto_select = 1
+"let g:neocomplcache_disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
+"inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+"if !exists('g:neocomplcache_omni_patterns')
+"  let g:neocomplcache_omni_patterns = {}
+"endif
+"let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+""autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+"let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+"let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 

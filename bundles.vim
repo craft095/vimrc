@@ -19,6 +19,12 @@ Bundle 'git://github.com/vim-scripts/L9.git'
 Bundle 'git://github.com/vim-scripts/FuzzyFinder.git'
 Bundle 'git://github.com/craft095/molokai.git'
 Bundle 'git://github.com/vim-scripts/Rainbow-Parenthsis-Bundle.git'
+
+Bundle 'git://github.com/Shougo/vimproc.git'
+Bundle 'git://github.com/eagletmt/ghcmod-vim.git'
+Bundle 'git://github.com/Shougo/neocomplcache.git'
+Bundle 'git://github.com/ujihisa/neco-ghc.git'
+" Bundle 'git://github.com/lukerandall/haskellmode-vim.git'
 " Bundle 'git://github.com/frerich/unicode-haskell.git'
 "
 " Bundle 'git://github.com/urso/dotrc.git', {'rtp': 'vim/syntax/haskell.vim'}
