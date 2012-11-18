@@ -203,7 +203,8 @@ endfunction
 autocmd! bufwritepre * call BackupDir()
 
 " setup building for haskell
-au FileType haskell set makeprg=ghc\ -i/home/dima/work/ais-exp\:/home/dima/work/ais-exp/resources\ -outputdir\ /home/dima/tmp/ghc-vim\ %
+"  au FileType haskell set makeprg=pushd\ /home/dima/work/ais-exp\;\ ghc\ -i/home/dima/work/ais-exp\:/home/dima/work/ais-exp/resources\ -outputdir\ /home/dima/tmp/ghc-vim\ %\ \;\ popd
+au FileType haskell set makeprg=bash\ -f\ vim-ghc.sh\ %
 au FileType haskell let b:ghc_staticoptions = '-i/home/dima/work/ais-exp\:/home/dima/work/ais-exp/resources'
 map cn :cn<cr>
 map cp :cp<cr>
